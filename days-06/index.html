@@ -19,10 +19,12 @@
 
     const cities = [];
 
+    //json 데이터 저장
     const prom = fetch(endpoint)
         .then(blop => blop.json())
         .then(data => cities.push(...data));
 
+    //검색 매치
     function findMatches(wordToMatch, cities) {
         return cities.filter(place => {
             const regex = new RegExp(wordToMatch, 'gi');
@@ -30,10 +32,13 @@
         })
     }
 
+
+    //숫자 3자리 단위로 ','자름
     function numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
 
+    //화면에 검색 결과 그림
     function displayMatches() {
         const matchArray = findMatches(this.value, cities);
         const html = matchArray.map(place => {
@@ -51,9 +56,11 @@
 
     }
 
+    //선택자
     const searchInput = document.querySelector('.search');
     const suggestions = document.querySelector('.suggestions');
 
+    //이벤트 추가
     searchInput.addEventListener('change',displayMatches);
     searchInput.addEventListener('keyup',displayMatches);
 </script>
