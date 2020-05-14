@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HTML5 Canvas</title>
+</head>
+<body>
+<canvas id="draw" width="800" height="800"></canvas>
+<script>
+    //canvas 돔 연결
+    const canavs = document.querySelector('#draw');
+    //getContext() 드로잉 컨텍스트 엑세스
+    const ctx = canavs.getContext('2d');
+    canavs.witdh = window.innerWidth;
+    canavs.height = window.innerHeight;
+    ctx.strokeStyle = '#BADA55';
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.lineWidth = 100;
+    //투명도
+    // ctx.globalCompositeOperation = 'multiply';
+
+    let isDrawing = false;
+    let lastX = 0; //X
+    let lastY = 0; //Y
+    let hue = 0; //색
+    let direction = true; //line width
+
+    function draw(e) {
+        if(!isDrawing) return; // stop the running
+        console.log(e);
+        //strokeStyle 윤곽선 색
+        ctx.strokeStyle = `hsl(${hue},100%,50%)`;
+        //lineWidth 윤곽선 굵기
+        ctx.lineWidth=hue;
+        // 시작점
+        ctx.beginPath();
+        // goto
+        ctx.moveTo(lastX,lastY); //펜을 이동
+        ctx.lineTo(e.offsetX, e.offsetY); //선을 드로잉
+        ctx.stroke(); //윤곽선선        [lastX,lastY] = [e.offsetX, e.offsetY];
+
+
+        hue++;
+        if(hue >= 360){
+            hue = 0;
+        }
+        if(ctx.lineWidth >= 100 || ctx.lineWidth <=1){
+            direction = !direction;
+        }
+        if(direction){
+            ctx.lineWidth++;
+        }else{
+            ctx.lineWidth--;
+        }
+    }
+    //드로우 이벤트
+    canavs.addEventListener('mousedown',(e) => {
+         isDrawing = true;
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+
+    });
+    canavs.addEventListener('mousemove',draw);
+    canavs.addEventListener('mouseup',() => isDrawing = false);
+    canavs.addEventListener('mouseout',() => isDrawing = false);
+
+
+
+
+</script>
+
+<style>
+    html, body {
+        margin: 0;
+    }
+</style>
+
+</body>
+</html>
