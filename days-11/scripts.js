@@ -26,7 +26,7 @@ function skip(){
     video.currentTime += parseFloat(this.dataset.skip);
 }
 
-//볼륨조절
+//
 function handleRangeUpdate(){
     video[this.name] = this.value;
 }
