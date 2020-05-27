@@ -29,12 +29,53 @@
 </div>
 
 <script>
+    //문자 읽어주는 객체 생성
     const msg = new SpeechSynthesisUtterance();
     let voices = [];
     const voicesDropdown = document.querySelector('[name="voice"]');
     const options = document.querySelectorAll('[type="range"], [name="text"]');
     const speakButton = document.querySelector('#speak');
     const stopButton = document.querySelector('#stop');
+
+    msg.text = document.querySelector('[name="text"]').value;
+
+    //select vocie list
+    function populateVoices(){
+        voices = this.getVoices();
+        voicesDropdown.innerHTML = voices
+            //filter로 특정 언어로만 선택가능
+            // .filter(voice => voice.lang.includes('en'))
+            .map(voice => `<option value="${voice.name}">${voice.name} (${voice.lang})</option>`)
+            .join('');
+
+    }
+
+    //변경된 보이스로 설정
+    function setVoice() {
+        msg.voice = voices.find(voice => voice.name === this.value);
+    }
+
+    //클릭시 speak
+    function toggle(startOver = true){
+        speechSynthesis.cancel();
+        if (startOver) {
+            speechSynthesis.speak(msg);
+        }
+    }
+
+    //rate, pitch 값 설정
+    function setOption() {
+        msg[this.name] = this.value;
+        toggle();
+    }
+
+
+    speechSynthesis.addEventListener('voiceschanged', populateVoices);
+    voicesDropdown.addEventListener('change', setVoice);
+    options.forEach(option => option.addEventListener('change', setOption));
+    speakButton.addEventListener('click', toggle);
+    stopButton.addEventListener('click', () => toggle(false));
+
 </script>
 
 </body>
