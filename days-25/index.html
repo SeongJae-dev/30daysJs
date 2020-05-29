@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Understanding JavaScript's Capture</title>
+</head>
+<body class="bod">
+
+<div class="one">
+    <div class="two">
+        <div class="three">
+        </div>
+    </div>
+</div>
+
+<style>
+    html {
+        box-sizing: border-box;
+    }
+
+    *, *:before, *:after {
+        box-sizing: inherit;
+    }
+
+    div {
+        width: 100%;
+        padding: 100px;
+    }
+
+    .one {
+        background: thistle;
+    }
+
+    .two {
+        background: mistyrose;
+    }
+
+    .three {
+        background: coral;
+    }
+</style>
+
+<button></button>
+<script>
+    const divs = document.querySelectorAll('div');
+    const button = document.querySelector('button');
+
+    function logText(e) {
+        console.log(this.classList.value);
+        // e.stopPropagation(); //stop bubbling event의 전파르 막음 선택한 element만 선택가능
+    }
+
+    //event bubbling은 하위에서 상위로 탐색
+    divs.forEach(div => div.addEventListener('click', logText, {
+        capture: false, //capture 옵션 true를 주면 버블링과 반대로 상위에서 하위로
+        once: true
+    }))
+
+    button.addEventListener('click', () => {
+        console.log('click')
+    },{
+        once: true //이벤트를 한번만 실행
+    })
+
+</script>
+</body>
+</html>
